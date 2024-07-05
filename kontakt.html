@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Navigation</title>
+    <style>
+        /* Stile für den Inhalt und die Navigation */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .content {
+            width: 80%;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            animation: fadein 1s;
+            padding: 20px;
+            margin: 20px;
+            display: none; /* Initially hide all contents */
+        }
+        .retro-text {
+            font-size: 16px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+        .retro-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        /* Navigation bar */
+        .navigation-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200px; /* Breite anpassen, falls nötig */
+            background-color: #1e1e1e;
+            border-right: 2px solid #00ff00;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            box-sizing: border-box;
+            z-index: 100; /* Stelle sicher, dass die Navigationsleiste oben ist */
+        }
+
+        .navigation-link {
+            color: #00ff00;
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navigation-link:hover {
+            background-color: #00ff00;
+            color: #1e1e1e;
+        }
+
+        /* Stil für ausgewählten Link */
+        .selected {
+            font-weight: bold;
+        }
+
+        /* Animationen */
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation-bar">
+        <a href="index.html" class="navigation-link selected">Chatbot <</a>
+        <a href="nutzungsbedingungen.html" class="navigation-link">Nutzungsbedingungen</a>
+        <a href="kontakt.html" class="navigation-link">Kontakt</a>
+    </div>
+
+    <!-- Inhalte der einzelnen Seiten -->
+    <div id="chatbot" class="content" style="display: block;">
+        <h1 class="retro-heading">Chatbot</h1>
+        <p class="retro-text">
+            Hier könnte der Chatbot-Inhalt stehen.
+        </p>
+    </div>
+
+    <div id="nutzungsbedingungen" class="content">
+        <h1 class="retro-heading">Nutzungsbedingungen</h1>
+        <p class="retro-text">
+            Hier könnten die Nutzungsbedingungen stehen.
+        </p>
+    </div>
+
+    <div id="kontakt" class="content">
+        <h1 class="retro-heading">Kontakt</h1>
+        <p class="retro-text">
+            Hier könnte der Kontakt-Inhalt stehen.
+        </p>
+    </div>
+
+    <!-- JavaScript für die Pfeiltastennavigation und automatische Weiterleitung -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navigationLinks = document.querySelectorAll('.navigation-link');
+            const contents = document.querySelectorAll('.content');
+
+            let currentIndex = 0; // Index des aktuell ausgewählten Inhalts
+
+            // Funktion zum Umschalten der Inhalte basierend auf dem currentIndex
+            const toggleContent = () => {
+                contents.forEach((content, index) => {
+                    if (index === currentIndex) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+            };
+
+            // Funktion zum Aktualisieren des ausgewählten Navigationslinks basierend auf currentIndex
+            const updateSelectedLink = () => {
+                navigationLinks.forEach((link, index) => {
+                    if (index === currentIndex) {
+                        link.classList.add('selected');
+                    } else {
+                        link.classList.remove('selected');
+                    }
+                });
+            };
+
+            // Funktion zum Behandeln der Pfeiltastennavigation
+            const handleArrowNavigation = (event) => {
+                if (event.key === 'ArrowDown') {
+                    currentIndex = (currentIndex + 1) % contents.length;
+                    toggleContent();
+                    updateSelectedLink();
+                    preventDefaultIfAlreadyOnPage(); // Verhindern, dass die Seite erneut geladen wird
+                } else if (event.key === 'ArrowUp') {
+                    currentIndex = (currentIndex - 1 + contents.length) % contents.length;
+                    toggleContent();
+                    updateSelectedLink();
+                    preventDefaultIfAlreadyOnPage(); // Verhindern, dass die Seite erneut geladen wird
+                }
+            };
+
+            // Funktion zum Verhindern der erneuten Aktualisierung der Seite, wenn bereits auf der Seite
+            const preventDefaultIfAlreadyOnPage = () => {
+                const currentPath = window.location.pathname;
+                const targetPage = navigationLinks[currentIndex].getAttribute('href');
+                if (currentPath === targetPage) {
+                    event.preventDefault();
+                }
+            };
+
+            // Eventlistener für die Pfeiltastennavigation
+            document.addEventListener('keydown', handleArrowNavigation);
+
+            // Standardwerte beim Laden der Seite setzen
+            toggleContent();
+            updateSelectedLink();
+        });
+    </script>
+</body>
+</html>

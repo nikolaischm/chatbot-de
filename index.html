@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startmenü</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #00ff00;
+            line-height: 1.6;
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Verhindert die Scrollbar */
+        }
+        .container {
+            width: 400px; /* Festgelegte Breite für das Menü */
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            cursor: pointer;
+            padding: 10px 0;
+            position: relative; /* Position für das Pseudo-Element */
+        }
+        .selected::before {
+            content: "> ";
+            position: absolute;
+            left: -20px; /* Position des Pfeils */
+            color: #ff0000; /* Farbe des Pfeils */
+        }
+    </style>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .chat-container {
+            width: 400px;
+            background-color: #1e1e1e;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            animation: fadein 1s;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 2px solid #00ff00;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            animation: slidein 1s;
+        }
+        .user-message {
+            background-color: #004400;
+            text-align: right;
+            animation: slideInFromRight 0.8s ease-out;
+        }
+        .bot-message {
+            background-color: #003300;
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+        #user-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: none;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            border-top: 2px solid #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #send-button {
+            width: 60px;
+            padding: 10px;
+            border: none;
+            background-color: #00ff00;
+            color: #1e1e1e;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #send-button:hover {
+            background-color: #00cc00;
+        }
+        #user-input::placeholder {
+            color: #00ff00;
+        }
+        /* Retro style scrollbar */
+        #chat-box::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #chat-box::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+            border-radius: 5px;
+            border: 2px solid #1e1e1e;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes slidein {
+            from { transform: translateY(-50px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Pixel art animation */
+        .pixel-character {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        .robot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            animation: moveRobot 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes moveRobot {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(50px) rotate(45deg);
+            }
+            50% {
+                transform: translateX(0) rotate(90deg);
+            }
+            75% {
+                transform: translateX(-50px) rotate(135deg);
+            }
+            100% {
+                transform: translateX(0) rotate(180deg);
+            }
+        }
+
+        /* Navigation bar */
+        .navigation-bar {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .navigation-link {
+            margin: 0 10px;
+            color: #00ff00;
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 5px 10px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navigation-link:hover {
+            background-color: #00ff00;
+            color: #1e1e1e;
+        }
+    </style>
+</head>
+<div class="pixel-character" style="top: 20px; left: 20px;"></div>
+    <div class="pixel-character" style="top: 80px; left: 100px;"></div>
+    <div class="pixel-character" style="top: 150px; left: 250px;"></div>
+    <div class="pixel-character" style="top: 200px; left: 50px;"></div>
+    <div class="pixel-character" style="top: 300px; left: 180px;"></div>
+
+    <div class="robot" style="top: 50px; right: 20px;"></div>
+    <div class="robot" style="top: 150px; right: 100px;"></div>
+    <div class="robot" style="top: 250px; right: 200px;"></div>
+<body>
+    <div class="container">
+        <ul id="menu">
+            <li id="chatbot" class="selected">Chatbot</li>
+            <li id="nutzungsbedingungen">Nutzungsbedingungen</li>
+            <li id="kontakt">Kontakt</li>
+        </ul>
+    </div>
+
+    <script>
+        const menuItems = ['chatbot', 'nutzungsbedingungen', 'kontakt'];
+        let selectedIndex = 0;
+
+        const menu = document.getElementById('menu');
+        updateSelection();
+
+        document.addEventListener('keydown', function(e) {
+            switch (e.key) {
+                case 'ArrowUp':
+                    selectedIndex = Math.max(0, selectedIndex - 1);
+                    updateSelection();
+                    break;
+                case 'ArrowDown':
+                    selectedIndex = Math.min(menuItems.length - 1, selectedIndex + 1);
+                    updateSelection();
+                    break;
+                case 'Enter':
+                    navigate(menuItems[selectedIndex]);
+                    break;
+            }
+        });
+
+        function updateSelection() {
+            menuItems.forEach((item, index) => {
+                const li = document.getElementById(item);
+                if (index === selectedIndex) {
+                    li.classList.add('selected');
+                } else {
+                    li.classList.remove('selected');
+                }
+            });
+        }
+
+        function navigate(page) {
+            switch (page) {
+                case 'chatbot':
+                    window.location.href = 'chatbot.html';
+                    break;
+                case 'nutzungsbedingungen':
+                    window.location.href = 'nutzungsbedingungen.html';
+                    break;
+                case 'kontakt':
+                    window.location.href = 'kontakt.html';
+                    break;
+            }
+        }
+    </script>
+    <p>Navigiere mit den Pfeiltasten und drücke ENTER, um auszuwählen</p>
+</body>
+</html>

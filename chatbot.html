@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Chatbot im Dark Mode</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .chat-container {
+            width: 400px;
+            background-color: #1e1e1e;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            animation: fadein 1s;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-bottom: 2px solid #00ff00;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            animation: slidein 1s;
+        }
+        .user-message {
+            background-color: #004400;
+            text-align: right;
+            animation: slideInFromRight 0.8s ease-out;
+        }
+        .bot-message {
+            background-color: #003300;
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+        #user-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border: none;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            border-top: 2px solid #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #send-button {
+            width: 60px;
+            padding: 10px;
+            border: none;
+            background-color: #00ff00;
+            color: #1e1e1e;
+            cursor: pointer;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #send-button:hover {
+            background-color: #00cc00;
+        }
+        #user-input::placeholder {
+            color: #00ff00;
+        }
+        /* Retro style scrollbar */
+        #chat-box::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #chat-box::-webkit-scrollbar-track {
+            background: #1e1e1e;
+        }
+
+        #chat-box::-webkit-scrollbar-thumb {
+            background-color: #00ff00;
+            border-radius: 5px;
+            border: 2px solid #1e1e1e;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes slidein {
+            from { transform: translateY(-50px); opacity: 0; }
+            to   { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Pixel art animation */
+        .pixel-character {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #00ff00;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+
+        .robot {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ffcc00;
+            border-radius: 50%;
+            animation: moveRobot 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes moveRobot {
+            0% {
+                transform: translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateX(50px) rotate(45deg);
+            }
+            50% {
+                transform: translateX(0) rotate(90deg);
+            }
+            75% {
+                transform: translateX(-50px) rotate(135deg);
+            }
+            100% {
+                transform: translateX(0) rotate(180deg);
+            }
+        }
+
+        /* Navigation bar */
+        .navigation-bar {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .navigation-link {
+            margin: 0 10px;
+            color: #00ff00;
+            text-decoration: none;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 5px 10px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navigation-link:hover {
+            background-color: #00ff00;
+            color: #1e1e1e;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat-box">
+            <div id="messages">
+                <div class="message bot-message">Hallo! Wie kann ich Ihnen helfen?</div>
+            </div>
+        </div>
+        <input type="text" id="user-input" placeholder="Schreibe eine Nachricht...">
+        <button id="send-button">Senden</button>
+    </div>
+    
+    <!-- Pixelfiguren und Animationen -->
+    <div class="pixel-character" style="top: 20px; left: 20px;"></div>
+    <div class="pixel-character" style="top: 80px; left: 100px;"></div>
+    <div class="pixel-character" style="top: 150px; left: 250px;"></div>
+    <div class="pixel-character" style="top: 200px; left: 50px;"></div>
+    <div class="pixel-character" style="top: 300px; left: 180px;"></div>
+
+    <div class="robot" style="top: 50px; right: 20px;"></div>
+    <div class="robot" style="top: 150px; right: 100px;"></div>
+    <div class="robot" style="top: 250px; right: 200px;"></div>
+
+    <!-- Navigation bar -->
+    <div class="navigation-bar">
+        <a href="index.html" class="navigation-link">GO BACK</a>
+        <!-- Weitere Links hier einfügen -->
+    </div>
+
+    <script>
+        const responses = {
+            "hallo": "Hallo wie geht es dir?",
+            "wie geht es dir?": "Mir geht es gut, danke!",
+            "was machst du?": "Ich bin ein Chatbot, ich chatte mit dir!",
+            "was ist dein name?": "Ich bin ein einfacher Chatbot.",
+            "wie alt bist du?": "Ich bin zeitlos.",
+            "wo wohnst du?": "Im Internet.",
+            "was ist deine lieblingsfarbe?": "Grün, natürlich!",
+            "was ist dein lieblingsessen?": "Elektronen.",
+            "was ist deine aufgabe?": "Mit dir zu chatten.",
+            "kennst du musik?": "Ja, aber ich kann sie nicht hören."
+        };
+
+        const badWords = [
+            "arsch", "miststück", "depp", "dummkopf", "idiot", "blödmann", 
+            "verdammt", "scheiße", "scheiss", "scheiß", "kotzbrocken", 
+            "wichser", "fick", "ficken", "hure", "hurensohn", "schlampe", 
+            "drecksack", "arschloch", "penner", "pisser", "fotze", "spast", 
+            "spasti", "spastiker", "trottel", "verpiss", "verfickt", "schwachkopf", "a really bad word"
+        ];
+
+        const warnLimit = 2; // Anzahl der erlaubten Verwarnungen
+        let userWarnings = 0;
+        let isUserBlocked = false;
+
+        // Überprüfen, ob der Benutzer blockiert ist, wenn die Seite geladen wird
+        document.addEventListener("DOMContentLoaded", () => {
+            const blockInfo = JSON.parse(localStorage.getItem("blockInfo"));
+            if (blockInfo && blockInfo.isBlocked) {
+                isUserBlocked = true;
+                appendMessage("Du bist gesperrt wegen wiederholter Verstöße gegen die Nutzungsbedingungen.", "bot-message");
+            }
+
+            const storedWarnings = localStorage.getItem("userWarnings");
+            if (storedWarnings) {
+                userWarnings = parseInt(storedWarnings);
+            }
+        });
+
+        document.getElementById("send-button").addEventListener("click", sendMessage);
+        document.getElementById("user-input").addEventListener("keypress", function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const userMessage = inputField.value.trim().toLowerCase();
+
+            if (userMessage === "") return;
+
+            if (userMessage === "unlock pass1 bad") {
+                unblockUser();
+                inputField.value = "";
+                return;
+            }
+
+            if (isUserBlocked) {
+                appendMessage("Du bist gesperrt. Kontaktiere den Administrator.", "bot-message");
+                return;
+            }
+
+            if (containsBadWords(userMessage)) {
+                userWarnings++;
+                localStorage.setItem("userWarnings", userWarnings.toString());
+
+                if (userWarnings >= warnLimit) {
+                    blockUser();
+                    inputField.value = "";
+                    return;
+                } else {
+                    appendMessage("Schimpfwörter sind nicht erlaubt! Das war eine Verwarnung.", "bot-message");
+                }
+            }
+
+            appendMessage(userMessage, "user-message");
+
+            const botResponse = responses[userMessage] || "Entschuldigung, das verstehe ich nicht.";
+            setTimeout(() => appendMessage(botResponse, "bot-message"), 500);
+
+            inputField.value = "";
+        }
+
+        function containsBadWords(message) {
+            return badWords.some(word => message.includes(word));
+        }
+
+        function appendMessage(message, className) {
+            const messageContainer = document.createElement("div");
+            messageContainer.className = `message ${className}`;
+            messageContainer.innerText = message;
+
+            document.getElementById("messages").appendChild(messageContainer);
+            document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+        }
+
+        function blockUser() {
+            isUserBlocked = true;
+            localStorage.setItem("blockInfo", JSON.stringify({ isBlocked: true }));
+            appendMessage("Du bist gesperrt wegen wiederholter Verstöße gegen die Nutzungsbedingungen.", "bot-message");
+        }
+
+        function unblockUser() {
+            isUserBlocked = false;
+            userWarnings = 0;
+            localStorage.removeItem("blockInfo");
+            localStorage.removeItem("userWarnings");
+            appendMessage("Du wurdest entsperrt.", "bot-message");
+        }
+    </script>
+</body>
+</html>
